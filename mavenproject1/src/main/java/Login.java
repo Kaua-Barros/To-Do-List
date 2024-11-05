@@ -1,3 +1,10 @@
+
+import java.io.Closeable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.text.MaskFormatter;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -12,7 +19,16 @@ public class Login extends javax.swing.JFrame {
     /**
      * Creates new form Login
      */
+    
+    MaskFormatter mfdata;
+    
     public Login() {
+        
+        try{
+            mfdata = new MaskFormatter("##/##/####");
+        } catch(ParseException ex){
+            System.out.println("Error in Format");
+        }
         initComponents();
     }
 
@@ -31,8 +47,8 @@ public class Login extends javax.swing.JFrame {
         jTextFieldTaskName = new javax.swing.JTextField();
         jLabelDescription = new javax.swing.JLabel();
         jLabelTaskName = new javax.swing.JLabel();
-        jTextFieldDeadLine = new javax.swing.JTextField();
         jLabelDeadLine = new javax.swing.JLabel();
+        jFormattedTextFieldDeadLine = new javax.swing.JFormattedTextField(mfdata);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Inserir Tarefa");
@@ -58,6 +74,11 @@ public class Login extends javax.swing.JFrame {
         jTextAreaDescription.setAlignmentX(0.0F);
         jTextAreaDescription.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jTextAreaDescription.setDoubleBuffered(true);
+        jTextAreaDescription.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextAreaDescriptionFocusGained(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 10;
@@ -68,6 +89,11 @@ public class Login extends javax.swing.JFrame {
         jTextFieldTaskName.setText("Inserir Nome da Tarefa");
         jTextFieldTaskName.setAlignmentX(0.0F);
         jTextFieldTaskName.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jTextFieldTaskName.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextFieldTaskNameFocusGained(evt);
+            }
+        });
         jTextFieldTaskName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextFieldTaskNameActionPerformed(evt);
@@ -96,21 +122,6 @@ public class Login extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         getContentPane().add(jLabelTaskName, gridBagConstraints);
 
-        jTextFieldDeadLine.setText("Inserir Data de Entrega");
-        jTextFieldDeadLine.setAlignmentX(0.0F);
-        jTextFieldDeadLine.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jTextFieldDeadLine.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldDeadLineActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        getContentPane().add(jTextFieldDeadLine, gridBagConstraints);
-
         jLabelDeadLine.setText("Data final:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -119,25 +130,66 @@ public class Login extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         getContentPane().add(jLabelDeadLine, gridBagConstraints);
 
+        jFormattedTextFieldDeadLine.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jFormattedTextFieldDeadLine.setText("Inserir Data Final");
+        jFormattedTextFieldDeadLine.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jFormattedTextFieldDeadLineFocusLost(evt);
+            }
+        });
+        jFormattedTextFieldDeadLine.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jFormattedTextFieldDeadLineActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        getContentPane().add(jFormattedTextFieldDeadLine, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Task task = new Task();
         
         String taskName = jTextFieldTaskName.getText();
-        String deadLine = jTextFieldDeadLine.getText();
+        String deadLine = jFormattedTextFieldDeadLine.getText();
         String description = jTextAreaDescription.getText();
         
+        Task task = new Task(taskName, deadLine, description);
+        dispose();       
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTextFieldTaskNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTaskNameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldTaskNameActionPerformed
 
-    private void jTextFieldDeadLineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldDeadLineActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldDeadLineActionPerformed
+    private void jFormattedTextFieldDeadLineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextFieldDeadLineActionPerformed
+        
+    }//GEN-LAST:event_jFormattedTextFieldDeadLineActionPerformed
+
+    private void jFormattedTextFieldDeadLineFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jFormattedTextFieldDeadLineFocusLost
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        
+        try{
+            Date date = sdf.parse(jFormattedTextFieldDeadLine.getText());
+            jFormattedTextFieldDeadLine.setValue(sdf.format(date));
+        } catch(ParseException e){
+                jFormattedTextFieldDeadLine.setFocusLostBehavior(jFormattedTextFieldDeadLine.PERSIST);
+                jFormattedTextFieldDeadLine.setText("");
+                jFormattedTextFieldDeadLine.setValue(null);
+        }
+    }//GEN-LAST:event_jFormattedTextFieldDeadLineFocusLost
+
+    private void jTextFieldTaskNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldTaskNameFocusGained
+        jTextFieldTaskName.setText("");
+    }//GEN-LAST:event_jTextFieldTaskNameFocusGained
+
+    private void jTextAreaDescriptionFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextAreaDescriptionFocusGained
+        jTextAreaDescription.setText("");
+    }//GEN-LAST:event_jTextAreaDescriptionFocusGained
 
     /**
      * @param args the command line arguments
@@ -176,11 +228,11 @@ public class Login extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JFormattedTextField jFormattedTextFieldDeadLine;
     private javax.swing.JLabel jLabelDeadLine;
     private javax.swing.JLabel jLabelDescription;
     private javax.swing.JLabel jLabelTaskName;
     private javax.swing.JTextArea jTextAreaDescription;
-    private javax.swing.JTextField jTextFieldDeadLine;
     private javax.swing.JTextField jTextFieldTaskName;
     // End of variables declaration//GEN-END:variables
 }
