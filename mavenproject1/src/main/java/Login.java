@@ -123,7 +123,12 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String taskName = JTextFieldTaskName.getText();
+        Task task = new Task();
+        
+        String taskName = jTextFieldTaskName.getText();
+        String deadLine = jTextFieldDeadLine.getText();
+        String description = jTextAreaDescription.getText();
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTextFieldTaskNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTaskNameActionPerformed
